@@ -4,7 +4,11 @@ var router = express.Router();
 const routeEndpoint = '/users'
 
 router.get('/:userId', (req, res) => {
-    res.send(req.params);
+    const user = {
+        id: req.params.userId,
+        name: "Adam"
+    }
+    res.json(user);
 });
 
 router.post('/', (req, res) => {
