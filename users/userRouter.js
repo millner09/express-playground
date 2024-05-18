@@ -3,6 +3,12 @@ var router = express.Router();
 
 const routeEndpoint = '/users'
 
+// a middleware function with no mount path. This code is executed for every request to the router
+router.use((req, res, next) => {
+    console.log('Users endpoint being access')
+    next()
+})
+
 router.get('/:userId', (req, res) => {
     const user = {
         id: req.params.userId,
@@ -12,7 +18,7 @@ router.get('/:userId', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    res.send('Got a POST request, creating new user')
+    throw new Error('NOT IMPLEMENTED');
 });
 
 router.put('/:userId', (req, res) => {
