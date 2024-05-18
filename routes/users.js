@@ -15,6 +15,11 @@ router.use((req, res, next) => {
     next()
 })
 
+router.get('/', async (req, res) => {
+    const { rows } = await db.query('SELECT * FROM etest.users');
+    res.json(rows);
+})
+
 router.get('/:userId', async (req, res) => {
     const { userId } = req.params
     const { rows } = await db.query('SELECT * FROM etest.users WHERE id = $1', [userId])
@@ -22,8 +27,19 @@ router.get('/:userId', async (req, res) => {
     res.json(rows[0])
 });
 
-router.post('/', (req, res) => {
-    throw new Error('NOT IMPLEMENTED');
+router.post('/', async (req, res) => {
+    console.log(req.body);
+    const { name, email } = req.body;
+    if (name == undefined || email == undefined) {
+        throw new Error('Provided name or email was undefined');
+    }
+
+    const text = 'INSERT INTO etest.users(name, email) VALUES($1, $2) RETURNING *'
+    const values = [name, email]
+
+    const queryResult = await db.query(text, values)
+    console.log(queryResult.rows[0])
+    res.json(queryResult.rows[0])
 });
 
 router.put('/:userId', (req, res) => {
