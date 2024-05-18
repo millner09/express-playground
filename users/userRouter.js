@@ -1,32 +1,29 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+import * as db from '../db/index.js'
 
-const routeEndpoint = '/users'
+export var userRouter = express.Router();
 
 // a middleware function with no mount path. This code is executed for every request to the router
-router.use((req, res, next) => {
+userRouter.use((req, res, next) => {
     console.log('Users endpoint being access')
     next()
 })
 
-router.get('/:userId', (req, res) => {
-    const user = {
-        id: req.params.userId,
-        name: "Adam"
-    }
-    res.json(user);
+userRouter.get('/:userId', async (req, res) => {
+    const { userId } = req.params
+    const { rows } = await db.query('SELECT * FROM etest.users WHERE id = $1', [userId])
+
+    res.json(rows[0])
 });
 
-router.post('/', (req, res) => {
+userRouter.post('/', (req, res) => {
     throw new Error('NOT IMPLEMENTED');
 });
 
-router.put('/:userId', (req, res) => {
+userRouter.put('/:userId', (req, res) => {
     res.send(`Got a PUT request to update user ${req.params.userId}`)
 });
 
-router.delete('/:userId', (req, res) => {
+userRouter.delete('/:userId', (req, res) => {
     res.send(`Got a DELETE request user ${req.params.userId}`)
 });
-
-module.exports = router;

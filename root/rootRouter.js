@@ -1,20 +1,18 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+export var rootRouter = express.Router();
 
-router.get('/', (req, res) => {
+rootRouter.get('/', (req, res) => {
     res.send('Hello, world!');
 });
 
-router.post('/', (req, res) => {
+rootRouter.post('/', (req, res) => {
     res.send('Got a POST request')
 });
 
-router.put('/', (req, res) => {
+rootRouter.put('/', (req, res) => {
     res.send('Got a PUT request')
 });
 
-router.delete('/', (req, res) => {
+rootRouter.delete('/', (req, res) => {
     res.send('Got a DELETE request')
 });
-
-module.exports = router;

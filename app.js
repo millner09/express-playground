@@ -1,11 +1,12 @@
-require('dotenv').config()
-const express = require('express');
+import 'dotenv/config'
+import express from 'express';
+import { errorMiddleware } from './middleware/errorMiddleware.js';
+import { loggingMiddleware } from './middleware/loggingMiddleware.js';
+import { requestTimeMiddleware } from './middleware/requestTimeMiddleware.js';
+import { rootRouter } from './root/rootRouter.js';
+import { userRouter } from './users/userRouter.js';
+
 const app = express();
-const errorMiddleware = require('./middleware/errorMiddleware');
-const loggingMiddleware = require('./middleware/loggingMiddleware');
-const requestTimeMiddleware = require('./middleware/requestTimeMiddleware');
-const rootRouter = require('./root/rootRouter');
-const userRouter = require('./users/userRouter');
 
 app.use(requestTimeMiddleware);
 app.use(loggingMiddleware);
