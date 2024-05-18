@@ -3,15 +3,12 @@ import express from 'express';
 import { errorMiddleware } from './middleware/errorMiddleware.js';
 import { loggingMiddleware } from './middleware/loggingMiddleware.js';
 import { requestTimeMiddleware } from './middleware/requestTimeMiddleware.js';
-import { rootRouter } from './root/rootRouter.js';
-import { userRouter } from './users/userRouter.js';
-
+import mountRoutes from './routes/index.js'
 const app = express();
 
 app.use(requestTimeMiddleware);
 app.use(loggingMiddleware);
-app.use('/', rootRouter);
-app.use('/users', userRouter)
+mountRoutes(app)
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
