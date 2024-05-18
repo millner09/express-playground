@@ -1,5 +1,5 @@
 import Router from 'express-promise-router'
-import * as db from '../db/index.js'
+import userService from '../services/userService.js'
 
 // create a new express-promise-router
 // this has the same API as the normal express router except
@@ -16,15 +16,13 @@ router.use((req, res, next) => {
 })
 
 router.get('/', async (req, res) => {
-    const { rows } = await db.query('SELECT * FROM etest.users');
-    res.json(rows);
+    return res.json(await userService.getAllUsers())
 })
 
 router.get('/:userId', async (req, res) => {
     const { userId } = req.params
-    const { rows } = await db.query('SELECT * FROM etest.users WHERE id = $1', [userId])
 
-    res.json(rows[0])
+    res.json(await userService.getUserById(userId))
 });
 
 router.post('/', async (req, res) => {
@@ -34,18 +32,17 @@ router.post('/', async (req, res) => {
         throw new Error('Provided name or email was undefined');
     }
 
-    const text = 'INSERT INTO etest.users(name, email) VALUES($1, $2) RETURNING *'
-    const values = [name, email]
-
-    const queryResult = await db.query(text, values)
-    console.log(queryResult.rows[0])
-    res.json(queryResult.rows[0])
+    const savedUser = await userService.createUser({ name, email })
+    res.json(savedUser);
 });
 
 router.put('/:userId', (req, res) => {
     res.send(`Got a PUT request to update user ${req.params.userId}`)
 });
 
-router.delete('/:userId', (req, res) => {
+router.delete('/:userId', async (req, res) => {
+    const { userId } = req.params
+
+    await userService.deleteUser(userId);
     res.send(`Got a DELETE request user ${req.params.userId}`)
 });
