@@ -21,6 +21,11 @@ router.get('/', async (req, res) => {
 
 router.get('/:userId', async (req, res) => {
     const { userId } = req.params
+    const user = await getUserById(userId);
+
+    if (!user) {
+        res.sendStatus(404);
+    }
 
     res.json(await getUserById(userId))
 });

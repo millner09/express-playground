@@ -14,7 +14,7 @@ export const createUser = async (user) => {
     const text = 'INSERT INTO etest.users(name, email) VALUES($1, $2) RETURNING *'
     const values = [user.name, user.email]
 
-    const queryResult = await db.query(text, values)
+    const queryResult = await query(text, values)
     return queryResult.rows[0]
 }
 
