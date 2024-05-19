@@ -1,5 +1,5 @@
 import Router from 'express-promise-router'
-import userService from '../services/userService.js'
+import { getAllUsers, getUserById, createUser, deleteUser } from '../services/userService.js'
 
 // create a new express-promise-router
 // this has the same API as the normal express router except
@@ -16,13 +16,13 @@ router.use((req, res, next) => {
 })
 
 router.get('/', async (req, res) => {
-    return res.json(await userService.getAllUsers())
+    return res.json(await getAllUsers())
 })
 
 router.get('/:userId', async (req, res) => {
     const { userId } = req.params
 
-    res.json(await userService.getUserById(userId))
+    res.json(await getUserById(userId))
 });
 
 router.post('/', async (req, res) => {
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
         throw new Error('Provided name or email was undefined');
     }
 
-    const savedUser = await userService.createUser({ name, email })
+    const savedUser = await createUser({ name, email })
     res.json(savedUser);
 });
 
@@ -43,6 +43,6 @@ router.put('/:userId', (req, res) => {
 router.delete('/:userId', async (req, res) => {
     const { userId } = req.params
 
-    await userService.deleteUser(userId);
+    await deleteUser(userId);
     res.send(`Got a DELETE request user ${req.params.userId}`)
 });
