@@ -40,7 +40,7 @@ test("getUserById should return undefined when no users are found", async () => 
   query.mockResolvedValue({ rows: users });
 
   const getUserByIdResult = await getUserById(1);
-  return expect(getUserByIdResult).toEqual(undefined);
+  return expect(getUserByIdResult).toBeUndefined();
 });
 
 test("createUser should return the created user when they are successfully created", async () => {
